@@ -1,5 +1,7 @@
 package com.example.d.test.feature;
 
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
 
     @Override
     public boolean onCreateOptionsMenu (Menu menu){
@@ -73,6 +76,16 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         RecycledNewsAdapter adapter=new RecycledNewsAdapter(MainActivity.this, newsItemList);
         recyclerView.setAdapter(adapter);
+
+        navigationView=findViewById(R.id.nav_view);
+        navigationView.setCheckedItem(R.id.nav_call);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                drawerLayout.closeDrawers();
+                return true;
+            }
+        });
 
         drawerLayout=findViewById(R.id.drawer_layout);
         ActionBar actionBar=getSupportActionBar();
