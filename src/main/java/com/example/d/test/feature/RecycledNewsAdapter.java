@@ -48,7 +48,7 @@ public class RecycledNewsAdapter extends Adapter<RecycledNewsAdapter.ViewHolder>
 //                NewsItem newsItem=newsItemList.get(position);
 //                Toast.makeText(clickView.getContext(),newsItem.getTitle(),Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(activity, NewsView.class);
-                intent.putExtra("NewsPosition", position);
+                intent.putExtra("NewsTitle", holder.textView.getText());
                 activity.startActivity(intent);
             }
         });

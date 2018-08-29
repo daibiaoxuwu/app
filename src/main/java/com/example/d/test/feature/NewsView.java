@@ -14,8 +14,10 @@ public class NewsView extends AppCompatActivity {
         setContentView(R.layout.activity_news_view);
 
         Intent intent=getIntent();
-        int position=intent.getIntExtra("NewsPosition",0);
-        NewsItem newsItem=MainActivity.getNewsItemList().get(position);
+        String newsTitle=intent.getStringExtra("NewsTitle");
+
+        NewsItem newsItem=MainActivity.getNewsItemByTitle(newsTitle);
+
 
         TextView textView=findViewById(R.id.titleView);
         textView.setText(newsItem.getTitle());

@@ -1,5 +1,8 @@
 package com.example.d.test.feature;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -9,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,17 +28,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
 
     private static final String[] data={"a","b","c","d","e","f","g"};
 
+    //only for testing, not memory
     private static List<NewsItem> newsItemList=new ArrayList<>();
+
+    //this is in memory
+    private static List<NewsItem> cachedNewsItemList=new ArrayList<>();
 
     public static List<NewsItem> getNewsItemList() {
         return newsItemList;
     }
 
+    private static MyDatabaseHelper myDatabaseHelper;
+
+
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private RecyclerView mRecyclerView;
+
+    //for testing recyclerview
+    private static int newsPointer=5;
+
+    private static final int listSize=20;
 
     @Override
     public boolean onCreateOptionsMenu (Menu menu){
@@ -65,17 +83,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.first_layout);
 
+
         //toolbar
         Toolbar toolbar=findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        initNews();
 
-        RecyclerView recyclerView=findViewById(R.id.recycler_view);
+        mRecyclerView=findViewById(R.id.recycler_view);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        RecycledNewsAdapter adapter=new RecycledNewsAdapter(MainActivity.this, newsItemList);
-        recyclerView.setAdapter(adapter);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        myDatabaseHelper=new MyDatabaseHelper(this,"BookStore.db",null,1);
+        initNews();//mRecyclerView.setAdapter(adapter);
 
         navigationView=findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.nav_call);
@@ -95,13 +113,57 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void initNews(){
+    private void initNews() {
+        SQLiteDatabase database = myDatabaseHelper.getWritableDatabase();
         for (int i = 0; i < 7; i++) {
-            for(int j = 0; j <  7; j++) {
-                String text="This is content"+data[j];
-                NewsItem newsItem=new NewsItem(data[j],text,R.drawable.newspic1);
+            for (int j = 0; j < 7; j++) {
+                String text = "This is content" + data[j] + i;
+                NewsItem newsItem = new NewsItem(data[j] + i, text, R.drawable.newspic1);
                 newsItemList.add(newsItem);
+
+                //database
+                ContentValues contentValues = new ContentValues();
+                contentValues.put("title", data[j] + i);
+                contentValues.put("contents", text);
+                contentValues.put("src", "0");
+                database.insert("Book", null, contentValues);
             }
+        }
+        loadNews();
+    }
+    private void loadNews(){
+        cachedNewsItemList = new ArrayList<>();
+        for(int i=newsPointer;i<newsPointer + listSize;++i) {
+            //only get title.find contents by itself.
+            String newsTitle = newsItemList.get(i).getTitle();
+
+            NewsItem newsItem = getNewsItemByTitle(newsTitle);
+            if(newsItem != null){
+                cachedNewsItemList.add(newsItem);
+            } else {//TODO:download new newsItems
+                System.out.println("SQL error"+newsItemList.get(i).getText());
+                cachedNewsItemList.add(newsItemList.get(i));
+            }
+
+        }
+        Log.d(TAG, "loadNews: "+cachedNewsItemList.size());
+        RecycledNewsAdapter adapter=new RecycledNewsAdapter(MainActivity.this, cachedNewsItemList);
+        mRecyclerView.setAdapter(adapter);
+    }
+    static NewsItem getNewsItemByTitle(String newsTitle){
+        SQLiteDatabase database=myDatabaseHelper.getWritableDatabase();
+//        Cursor cursor=database.query("Book",null,null,null,null,null,null);
+        Cursor cursor;
+        cursor = database.query("Book", new String[] { "id",
+                        "title","contents","src" }, "title=?",
+                new String[] { newsTitle }, null, null, null, null);
+        if (cursor.moveToFirst()){//cached
+            NewsItem newsItem = new NewsItem(newsTitle,cursor.getString(2),Integer.parseInt(cursor.getString(3)));
+            cursor.close();
+            return newsItem;
+        } else {//not cached
+            cursor.close();
+            return null;
         }
     }
 }
