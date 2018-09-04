@@ -13,15 +13,12 @@ public class NewsView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_view);
 
-        Intent intent=getIntent();
-        String newsTitle=intent.getStringExtra("NewsTitle");
 
-        NewsItem newsItem=MainActivity.getNewsItemByTitle(newsTitle);
 
 
         TextView textView=findViewById(R.id.titleView);
-        textView.setText(newsItem.getTitle());
+        textView.setText("123");
         textView= findViewById(R.id.innerTextView);
-        textView.setText(newsItem.getText());
+        textView.setText("456");
     }
 }

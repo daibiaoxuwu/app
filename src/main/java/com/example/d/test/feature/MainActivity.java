@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         return newsItemList;
     }
 
-    private static MyDatabaseHelper myDatabaseHelper;
+//    private static MyDatabaseHelper myDatabaseHelper;
 
 
     private DrawerLayout drawerLayout;
@@ -92,8 +92,11 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView=findViewById(R.id.recycler_view);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        myDatabaseHelper=new MyDatabaseHelper(this,"BookStore.db",null,1);
-        initNews();//mRecyclerView.setAdapter(adapter);
+
+        ReadRss readRss = new ReadRss(this, mRecyclerView);
+        readRss.execute();
+//        myDatabaseHelper=new MyDatabaseHelper(this,"BookStore.db",null,1);
+//        initNews();//mRecyclerView.setAdapter(adapter);
 
         navigationView=findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.nav_call);
@@ -113,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void initNews() {
+    /*private void initNews() {
         SQLiteDatabase database = myDatabaseHelper.getWritableDatabase();
         for (int i = 0; i < 7; i++) {
             for (int j = 0; j < 7; j++) {
@@ -130,8 +133,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         loadNews();
-    }
-    private void loadNews(){
+    }*/
+   /* private void loadNews(){
         cachedNewsItemList = new ArrayList<>();
         for(int i=newsPointer;i<newsPointer + listSize;++i) {
             //only get title.find contents by itself.
@@ -149,8 +152,8 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "loadNews: "+cachedNewsItemList.size());
         RecycledNewsAdapter adapter=new RecycledNewsAdapter(MainActivity.this, cachedNewsItemList);
         mRecyclerView.setAdapter(adapter);
-    }
-    static NewsItem getNewsItemByTitle(String newsTitle){
+    }*/
+    /*static NewsItem getNewsItemByTitle(String newsTitle){
         SQLiteDatabase database=myDatabaseHelper.getWritableDatabase();
 //        Cursor cursor=database.query("Book",null,null,null,null,null,null);
         Cursor cursor;
@@ -165,5 +168,5 @@ public class MainActivity extends AppCompatActivity {
             cursor.close();
             return null;
         }
-    }
+    }*/
 }
