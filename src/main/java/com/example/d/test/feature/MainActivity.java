@@ -17,6 +17,8 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private RecyclerView mRecyclerView;
+    private WebView webView;
 
     //for testing recyclerview
     private static int newsPointer=5;
@@ -92,11 +95,11 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView=findViewById(R.id.recycler_view);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
-
         ReadRss readRss = new ReadRss(this, mRecyclerView);
         readRss.execute();
 //        myDatabaseHelper=new MyDatabaseHelper(this,"BookStore.db",null,1);
 //        initNews();//mRecyclerView.setAdapter(adapter);
+
 
         navigationView=findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.nav_call);
