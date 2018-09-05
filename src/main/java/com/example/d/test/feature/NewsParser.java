@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 
@@ -20,9 +21,11 @@ import java.net.URL;
 public class NewsParser {
     private Connection c;
     private Statement stmt;
-    private Map<String, String> sshUrlMap = new HashMap<>();
-    private ArrayList<NewsItem> arrayList = new ArrayList<>();
+    public static Map<String, String> sshUrlMap = new HashMap<>();
+    private LinkedList<NewsItem> arrayList = new LinkedList<>();
     private Map<String, NewsItem> arrayMap = new HashMap<>();
+    public static Map<String, Boolean> isRead = new HashMap<>();
+    public static Map<String, Boolean> isSaved = new HashMap<>();
     private void work(String url, String channel) {
         System.out.println("URL:"+url + " CHANNEL:"+channel + " ");
         try {
@@ -48,10 +51,10 @@ public class NewsParser {
         c = null;
         stmt = null;
     }
-    public ArrayList<NewsItem> parse(){
+    public LinkedList<NewsItem> parse(){
         try {
 //            while(true) {
-            arrayList = new ArrayList<>();
+            arrayList = new LinkedList<>();
             arrayMap = new HashMap<>();
             for (String string : sshUrlMap.keySet()) {
                 work(string, sshUrlMap.get(string));
@@ -98,7 +101,9 @@ public class NewsParser {
     }
 
     private void readDoc3(Document doc, String channel) {
-        for (Element element : doc.select("item")) {
+        Elements elements = doc.select("item");
+        for (int i = elements.size() - 1; i >= 0; i--) {
+            Element element = elements.get(i);
             NewsItem newsItem = new NewsItem();
             String title = element.getElementsByTag("title").text();
             if(arrayMap.containsKey(title)){
@@ -130,8 +135,10 @@ public class NewsParser {
                     newsItem.setPics(src);
                 }
 
-                arrayList.add(newsItem);
+                arrayList.addFirst(newsItem);
                 arrayMap.put(newsItem.getTitle(),newsItem);
+                isRead.put(newsItem.getTitle(), false);
+                isSaved.put(newsItem.getTitle(), false);
             }
         }
     }

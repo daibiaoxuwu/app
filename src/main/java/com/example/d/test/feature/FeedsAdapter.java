@@ -18,14 +18,15 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  * Created by rishabh on 26-02-2016.
  */
 public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder> {
-    ArrayList<NewsItem>newsItems;
+    LinkedList<NewsItem>newsItems;
     Context context;
-    public FeedsAdapter(Context context, ArrayList<NewsItem>newsItems){
+    public FeedsAdapter(Context context, LinkedList<NewsItem> newsItems){
         this.newsItems = newsItems;
         this.context=context;
     }

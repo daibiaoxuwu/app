@@ -8,6 +8,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     //this is in memory
     private static List<NewsItem> cachedNewsItemList=new ArrayList<>();
+    private ReadRss readRss;
 
     public static List<NewsItem> getNewsItemList() {
         return newsItemList;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private WebView webView;
 
+    private static SwipeRefreshLayout swipeRefreshLayout;
     //for testing recyclerview
     private static int newsPointer=5;
 
@@ -96,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView=findViewById(R.id.recycler_view);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        ReadRss readRss = new ReadRss(this, mRecyclerView);
+        readRss = new ReadRss(this, mRecyclerView);
         readRss.execute();
 //        myDatabaseHelper=new MyDatabaseHelper(this,"BookStore.db",null,1);
 //        initNews();//mRecyclerView.setAdapter(adapter);
@@ -119,6 +122,32 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         }
 
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
+    }
+
+    public static SwipeRefreshLayout getSwipeRefreshLayout() {
+        return swipeRefreshLayout;
+    }
+
+    private void refresh(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        readRss = new ReadRss(MainActivity.this, mRecyclerView);
+                        readRss.execute();
+                    }
+                });
+            }
+        }).start();
     }
 
     /*private void initNews() {

@@ -3,6 +3,7 @@ package com.example.d.test.feature;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,6 +24,7 @@ import org.jsoup.select.Elements;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,12 +33,12 @@ import java.util.regex.Pattern;
  */
 public class ReadRss extends AsyncTask<Void, Void, Void> {
     Context context;
-    String address = "http://news.qq.com/society_index.shtml";
     ProgressDialog progressDialog;
-    ArrayList<NewsItem> newsItems;
+    LinkedList<NewsItem> newsItems;
     RecyclerView recyclerView;
     URL url;
     private NewsParser newsParser;
+    private boolean firstrun;
 
     public ReadRss(Context context, RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
@@ -49,7 +51,8 @@ public class ReadRss extends AsyncTask<Void, Void, Void> {
     //before fetching of rss statrs show progress to user
     @Override
     protected void onPreExecute() {
-        progressDialog.show();
+        if(firstrun)
+            progressDialog.show();
         super.onPreExecute();
     }
 
@@ -65,12 +68,15 @@ public class ReadRss extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        progressDialog.dismiss();
+        if(firstrun) {
+            progressDialog.dismiss();
+            firstrun = false;
+        }
         FeedsAdapter adapter = new FeedsAdapter(context, newsItems);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.addItemDecoration(new VerticalSpace(20));
         recyclerView.setAdapter(adapter);
-
+        MainActivity.getSwipeRefreshLayout().setRefreshing(false);
     }
 
     public void ProcessXml() {
