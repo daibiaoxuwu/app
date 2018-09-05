@@ -37,10 +37,12 @@ public class ReadRss extends AsyncTask<Void, Void, Void> {
     ArrayList<NewsItem> newsItems;
     RecyclerView recyclerView;
     URL url;
+    private NewsParser newsParser;
 
     public ReadRss(Context context, RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
         this.context = context;
+        this.newsParser = new NewsParser();
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Loading...");
     }
@@ -74,8 +76,7 @@ public class ReadRss extends AsyncTask<Void, Void, Void> {
 
     public void ProcessXml() {
         try {
-            new NewsParser();
-            newsItems = JsoupFull.arrayList;
+            newsItems = newsParser.parse();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
