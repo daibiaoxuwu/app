@@ -1,8 +1,5 @@
 package com.example.d.test.feature;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -14,17 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
@@ -42,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
     //this is in memory
     private static List<NewsItem> cachedNewsItemList=new ArrayList<>();
     private ReadRss readRss;
+    private TabLayout tabLayout;
+    private static String selectedChannel = "首页";
+    private static final ArrayList<NewsItem> newsItemOfCategory = new ArrayList<>();
 
     public static List<NewsItem> getNewsItemList() {
         return newsItemList;
@@ -129,6 +121,69 @@ public class MainActivity extends AppCompatActivity {
                 refresh();
             }
         });
+//        swipeRefreshLayout.setRefreshing(true);
+
+
+        tabLayout = (TabLayout) findViewById(R.id.simpleTabLayout);
+        TabLayout.Tab firstTab = tabLayout.newTab();
+        firstTab.setText("首页");
+        tabLayout.addTab(firstTab);
+        for (String string : NewsParser.sshUrlMap.values()) {
+            TabLayout.Tab tempTab = tabLayout.newTab();
+            tempTab.setText(string);
+            tabLayout.addTab(tempTab);
+        }
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                selectedChannel = tab.getText().toString();
+                if(!swipeRefreshLayout.isRefreshing()){
+                    changeTab();
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+    }
+    private final static int MAX_NEWS_ITEM_SIZE = 25;
+    public void changeTab(){
+//                Toast.makeText(MainActivity.this,selectedChannel,Toast.LENGTH_SHORT).show();
+        if(!selectedChannel.equals("首页")) {
+            newsItemOfCategory.clear();
+            for(NewsItem newsItem:ReadRss.getNewsItems()){
+                if(newsItem.getChannel().contains(selectedChannel)){
+                    newsItemOfCategory.add(newsItem);
+                    if(newsItemOfCategory.size()> MAX_NEWS_ITEM_SIZE) break;
+                }
+            }
+            FeedsAdapter adapter = new FeedsAdapter(newsItemOfCategory, MainActivity.this);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+            mRecyclerView.addItemDecoration(new VerticalSpace(20));
+            mRecyclerView.setAdapter(adapter);
+        } else {
+            FeedsAdapter adapter = new FeedsAdapter(ReadRss.getNewsItems(), MainActivity.this);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+            mRecyclerView.addItemDecoration(new VerticalSpace(20));
+            mRecyclerView.setAdapter(adapter);
+        }
+    }
+
+    public static String getSelectedChannel() {
+        return selectedChannel;
+    }
+
+    public static ArrayList<NewsItem> getNewsItemOfCategory() {
+        return newsItemOfCategory;
     }
 
     public static SwipeRefreshLayout getSwipeRefreshLayout() {

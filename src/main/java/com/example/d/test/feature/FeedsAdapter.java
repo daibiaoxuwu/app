@@ -19,16 +19,18 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by rishabh on 26-02-2016.
  */
 public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder> {
-    LinkedList<NewsItem>newsItems;
+    List<NewsItem> newsItems;
     Context context;
-    public FeedsAdapter(Context context, LinkedList<NewsItem> newsItems){
+
+    public FeedsAdapter(List<NewsItem> newsItems,  Context context) {
         this.newsItems = newsItems;
-        this.context=context;
+        this.context = context;
     }
 
     private static final String TAG = "FeedsAdapter";
@@ -39,11 +41,12 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
         holder.newsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View clickView) {
-                int position=holder.getAdapterPosition();
-                Intent intent=new Intent(context, NewsView.class);
-                intent.putExtra("Url", newsItems.get(position).getLink());
-                context.startActivity(intent);
+                    int position = holder.getAdapterPosition();
+                    Intent intent = new Intent(context, NewsView.class);
+                    intent.putExtra("Url", newsItems.get(position).getLink());
+                    context.startActivity(intent);
             }
+
         });
         return holder;
     }
@@ -54,7 +57,7 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
         NewsItem current=newsItems.get(position);
         holder.Title.setText(current.getTitle());
         holder.Description.setText(current.getDescription());
-        holder.Date.setText(current.getPubdate());
+        holder.Date.setText(current.getChannel() + " " + current.getPubdate());
         if(current.getPics().size() > 0)
             Picasso.with(context).load(current.getPics().get(0)).into(holder.Thumbnail);
         else

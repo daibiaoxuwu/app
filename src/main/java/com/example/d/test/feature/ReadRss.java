@@ -32,20 +32,25 @@ import java.util.regex.Pattern;
  * Created by rishabh on 31-01-2016.
  */
 public class ReadRss extends AsyncTask<Void, Void, Void> {
-    Context context;
-    ProgressDialog progressDialog;
-    LinkedList<NewsItem> newsItems;
+    MainActivity context;
+    private ProgressDialog progressDialog;
+    private static LinkedList<NewsItem> newsItems;
     RecyclerView recyclerView;
     URL url;
     private NewsParser newsParser;
-    private boolean firstrun;
+    private boolean firstrun = true;
+    private String oldSelectedChannel;
 
-    public ReadRss(Context context, RecyclerView recyclerView) {
+    public ReadRss(MainActivity context, RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
         this.context = context;
         this.newsParser = new NewsParser();
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Loading...");
+    }
+
+    public static LinkedList<NewsItem> getNewsItems() {
+        return newsItems;
     }
 
     //before fetching of rss statrs show progress to user
@@ -72,10 +77,12 @@ public class ReadRss extends AsyncTask<Void, Void, Void> {
             progressDialog.dismiss();
             firstrun = false;
         }
-        FeedsAdapter adapter = new FeedsAdapter(context, newsItems);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.addItemDecoration(new VerticalSpace(20));
-        recyclerView.setAdapter(adapter);
+        context.changeTab();
+
+//        FeedsAdapter adapter = new FeedsAdapter(newsItems, context);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+//        recyclerView.addItemDecoration(new VerticalSpace(20));
+//        recyclerView.setAdapter(adapter);
         MainActivity.getSwipeRefreshLayout().setRefreshing(false);
     }
 

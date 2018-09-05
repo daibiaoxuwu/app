@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:id="@+id/cardview"
     app:cardElevation="2dp"
-    app:cardCornerRadius="2dp">
+    app:cardCornerRadius="2dp" >
 
     <RelativeLayout
         android:layout_width="match_parent"
