@@ -23,10 +23,10 @@ import java.util.ArrayList;
  * Created by rishabh on 26-02-2016.
  */
 public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder> {
-    ArrayList<FeedItem>feedItems;
+    ArrayList<NewsItem>newsItems;
     Context context;
-    public FeedsAdapter(Context context, ArrayList<FeedItem>feedItems){
-        this.feedItems=feedItems;
+    public FeedsAdapter(Context context, ArrayList<NewsItem>newsItems){
+        this.newsItems = newsItems;
         this.context=context;
     }
 
@@ -39,14 +39,8 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
             @Override
             public void onClick(View clickView) {
                 int position=holder.getAdapterPosition();
-//                NewsItem newsItem=newsItemList.get(position);
-//                Toast.makeText(clickView.getContext(),newsItem.getTitle(),Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(context, NewsView.class);
-                intent.putExtra("Url", feedItems.get(position).getUrl().toString());
-//                Log.d(TAG, "onClick: " + position +  " " + feedItems.get(position).getUrl());
-//                intent.putExtra("Title", holder.Title.getText());
-//                intent.putExtra("Description", holder.Description.getText());
-//                intent.putExtra("Date", holder.Date.getText());
+                intent.putExtra("Url", newsItems.get(position).getLink());
                 context.startActivity(intent);
             }
         });
@@ -56,18 +50,22 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         YoYo.with(Techniques.FadeIn).playOn(holder.cardView);
-        FeedItem current=feedItems.get(position);
+        NewsItem current=newsItems.get(position);
         holder.Title.setText(current.getTitle());
         holder.Description.setText(current.getDescription());
-        holder.Date.setText(current.getPubDate());
-        Picasso.with(context).load(current.getPics().get(0).toString()).into(holder.Thumbnail);
+        holder.Date.setText(current.getPubdate());
+        if(current.getPics().size() > 0)
+            Picasso.with(context).load(current.getPics().get(0)).into(holder.Thumbnail);
+        else
+            Picasso.with(context).load("http://rss.people.com.cn/img/2014peoplelogo/rss_logo.gif").into(holder.Thumbnail);
+
     }
 
 
 
     @Override
     public int getItemCount() {
-        return feedItems.size();
+        return newsItems.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

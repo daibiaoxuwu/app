@@ -35,29 +35,18 @@ public class NewsView extends AppCompatActivity {
 //        Log.d(TAG, "onCreate: " + url);
 
         webView = findViewById(R.id.web_view);
-
         WebSettings settings = webView.getSettings();
-//        settings.setUserAgentString("app/XXX");//添加UA,  “app/XXX”：是与h5商量好的标识，h5确认UA为app/XXX就认为该请求的终端为App
-
-        String ua = webView.getSettings().getUserAgentString();
-        webView.getSettings().setUserAgentString(ua + " APP_TAG/5.0.1");
-
+        settings.setUserAgentString(settings.getUserAgentString() + " APP_TAG/5.0.1");
         settings.setJavaScriptEnabled(true);
-
-        //设置参数
         settings.setBuiltInZoomControls(true);
         settings.setAppCacheEnabled(true);// 设置缓存
-
-//        webView.setWebChromeClient(new WebChromeClient());
-        webView.getSettings().setDomStorageEnabled(true);
-
+        settings.setDomStorageEnabled(true);
         webView.setWebViewClient(new WebViewClient());
-
-//        webView.loadUrl(loadurl);
-//        webView.getSettings().setJavaScriptEnabled(true);
-//        webview.getSettings().setUserAgentString(ua+"; 自定义标记");
-//        webView.setWebViewClient(new WebViewClient());
-//        Toast.makeText(NewsView.this,url,Toast.LENGTH_SHORT).show();
         webView.loadUrl(url);
+        //以上关于webView的设置引用自:
+        //作者：HolenZhou
+        //链接：https://www.jianshu.com/p/979c99820f76
+        //來源：简书
+        //简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。
     }
 }

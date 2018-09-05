@@ -34,6 +34,7 @@ public class ReadRss extends AsyncTask<Void, Void, Void> {
     String address = "http://news.qq.com/society_index.shtml";
     ProgressDialog progressDialog;
     ArrayList<FeedItem> feedItems;
+    ArrayList<NewsItem> newsItems;
     RecyclerView recyclerView;
     URL url;
 
@@ -56,8 +57,7 @@ public class ReadRss extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... params) {
         //call process xml method to process document we downloaded from getData() method
-        ProcessXml(Getdata());
-
+        ProcessXml();
         return null;
     }
 
@@ -65,133 +65,24 @@ public class ReadRss extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         progressDialog.dismiss();
-        FeedsAdapter adapter = new FeedsAdapter(context, feedItems);
+        FeedsAdapter adapter = new FeedsAdapter(context, newsItems);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.addItemDecoration(new VerticalSpace(20));
         recyclerView.setAdapter(adapter);
 
     }
-    public void ProcessXml(Document doc) {
+
+    public void ProcessXml() {
         try {
-            feedItems = new ArrayList<>();
-            if(doc == null) return;
-            Elements newsHeadlines = doc.select(".Q-tpList");
-            Pattern pattern = Pattern.compile("src=\"([^\"]+)\"");
-            for (Element headline : newsHeadlines) {
-                FeedItem item = new FeedItem();
-                Elements elements = headline.select(".Q-tpWrap .text .linkto");
-                if (elements == null) continue;
-                if (elements.first() == null) continue;
-                item.setTitle(elements.first().text());
-                item.setUrl(new URL(elements.first().absUrl("abs:href")));
-
-                elements = headline.select(".Q-tpWrap .pic img");
-                if (elements == null) continue;
-                if (elements.first() == null) continue;
-                String string = elements.first().toString();
-                Matcher matcher = pattern.matcher(string);
-                if (matcher.find()){
-                    String s=matcher.group(1);
-                    if(s.charAt(0)!='h') s="http:"+s;
-                    URL url = new URL(s);
-                    item.getPics().add(url);
-                }
-                else
-                    throw (new Exception());
-                feedItems.add(item);
-            }
-
-            newsHeadlines = doc.select(".Q-pList");
-            Pattern pattern2 = Pattern.compile("href=\"([^\"]+)\"");
-            for (Element headline : newsHeadlines) {
-                FeedItem item = new FeedItem();
-                Element element = headline.getElementsByClass("content").first();
-                if (element == null) continue;
-                item.setTitle(element.text());
-//                item.setUrl(new URL(elements.first().absUrl("abs:href")));
-                String string = element.toString();
-                Matcher matcher = pattern2.matcher(string);
-                if (matcher.find()){
-                    String s=matcher.group(1);
-                    if(s.charAt(0)!='h') s="http:"+s;
-                    URL url = new URL(s);
-                    item.setUrl(url);
-                }
-                else
-                    throw (new Exception());
-                Elements elements = element.getElementsByTag("ul").first().getElementsByTag("li");
-                for (Element element1 : elements) {
-                    string = element1.getElementsByTag("a").first().getElementsByTag("img").first().toString();
-                    matcher = pattern.matcher(string);
-                    if (matcher.find()){
-                        String s=matcher.group(1);
-                        if(s.charAt(0)!='h') s="http:"+s;
-                        URL url = new URL(s);
-                        item.getPics().add(url);
-                    }
-                    else
-                        throw (new Exception());
-                }
-                feedItems.add(item);
-            }
+            new NewsParser();
+            newsItems = JsoupFull.arrayList;
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
         }
     }
-/*
-    // In this method we will process Rss feed  document we downloaded to parse useful information from it
-        if (data != null) {
-            feedItems = new ArrayList<>();
-            Element root = data.getDocumentElement();
-            Node channel = root.getChildNodes().item(1);
-            NodeList items = channel.getChildNodes();
-            for (int i = 0; i < items.getLength(); i++) {
-                Node cureentchild = items.item(i);
-                if (cureentchild.getNodeName().equalsIgnoreCase("item")) {
-                    FeedItem item = new FeedItem();
-                    NodeList itemchilds = cureentchild.getChildNodes();
-                    for (int j = 0; j < itemchilds.getLength(); j++) {
-                        Node cureent = itemchilds.item(j);
-                        if (cureent.getNodeName().equalsIgnoreCase("title")) {
-                            item.setTitle(cureent.getTextContent());
-                        } else if (cureent.getNodeName().equalsIgnoreCase("description")) {
-                            item.setDescription(cureent.getTextContent());
-                        } else if (cureent.getNodeName().equalsIgnoreCase("pubDate")) {
-                            item.setPubDate(cureent.getTextContent());
-                        } else if (cureent.getNodeName().equalsIgnoreCase("link")) {
-                            item.setLink(cureent.getTextContent());
-                        } else if (cureent.getNodeName().equalsIgnoreCase("media:thumbnail")) {
-                            //this will return us thumbnail url
-                            String url = cureent.getAttributes().item(0).getTextContent();
-                            item.setThumbnailUrl(url);
-                        }
-                    }
-                    feedItems.add(item);
-
-
-                }
-            }
-        }
-    }*/
 
     //This method will download rss feed document from specified url
     private static final String TAG = "ReadRss";
-    public Document Getdata() {
-        try {
-//            url = new URL(address);
-//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//            connection.setRequestMethod("GET");
-//            InputStream inputStream = connection.getInputStream();
-//            DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-//            DocumentBuilder builder = builderFactory.newDocumentBuilder();
-//            Document xmlDoc = builder.parse(inputStream);
-            Document doc = Jsoup.connect(address).userAgent("Mozilla").timeout(5000).get();
-            return doc;
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e(TAG, "Getdata: ");
-            return null;
-        }
-    }
 }
+
