@@ -11,25 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jsoup.Jsoup;
-        import org.jsoup.nodes.Document;
-        import org.jsoup.nodes.Element;
-        import org.jsoup.select.Elements;
-
-        import java.io.InputStream;
-        import java.net.MalformedURLException;
-        import java.net.URL;
-        import java.util.ArrayList;
-        import java.util.HashMap;
-        import java.util.Map;
-        import java.util.Random;
-
-
-
 public class JsoupFull {
     static ArrayList<NewsItem> arrayList = new ArrayList<>();
     static Map<String, NewsItem> arrayMap = new HashMap<>();
-
 
     static void readDoc3(Document doc, String channel) {
         for (Element element : doc.select("item")) {
@@ -67,9 +51,6 @@ public class JsoupFull {
                 arrayList.add(newsItem);
                 arrayMap.put(newsItem.getTitle(),newsItem);
             }
-//            if(Math.random()>0.9){
-//                System.out.println(newsItem);
-//            }
         }
     }
 }
