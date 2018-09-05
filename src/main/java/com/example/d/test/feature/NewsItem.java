@@ -1,5 +1,7 @@
 package com.example.d.test.feature;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 
 public class NewsItem {
@@ -109,6 +111,6 @@ public class NewsItem {
     public String dbString(){
         return "VALUES ('" + title + "', '" + link + "', '"+ author + "', '"
                 + pubdate + "', '"+ category + "', '"+ comments + "', '"
-                + description+"', '"+channel + "', '" + String.join(";",pics) + "');";
+                + description+"', '"+channel + "', '" + TextUtils.join(";",pics) + "');";
     }
 }

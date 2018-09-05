@@ -33,7 +33,6 @@ public class ReadRss extends AsyncTask<Void, Void, Void> {
     Context context;
     String address = "http://news.qq.com/society_index.shtml";
     ProgressDialog progressDialog;
-    ArrayList<FeedItem> feedItems;
     ArrayList<NewsItem> newsItems;
     RecyclerView recyclerView;
     URL url;
