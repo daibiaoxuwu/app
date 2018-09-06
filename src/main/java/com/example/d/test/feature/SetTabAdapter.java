@@ -28,28 +28,19 @@ class SetTabAdapter extends MyBaseAdapter<String>{
     public SetTabViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context)
                 .inflate(R.layout.simple_item_layout, parent, false);
-        Log.d(TAG, "onCreateViewHolder: "+view);
         final SetTabViewHolder holder = new SetTabViewHolder(view);
-        Log.d(TAG, "onCreateViewHolder: "+holder);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
-                if(position<0) {
-                    Log.e(TAG, "onClick: position: " + position);
-                    Log.e(TAG, "onClick: position" + holder.getLayoutPosition() );
-                    Log.e(TAG, "onClick: position" + holder);
-                }
-                else {
                     String string = SetTabActivity.datas.get(position);
-//                    if (MainActivity.setTabs.contains(string)) {
-//                        MainActivity.setTabs.remove(position);
-//                        holder.textView.setTextColor(0xFF9E9E9E);
-//                    } else {
-//                        MainActivity.setTabs.add(string);
-//                        holder.textView.setTextColor(0xFF000000);
-//                    }
-                }
+                    if (MainActivity.setTabs.contains(string)) {
+                        MainActivity.setTabs.remove(string);
+                        holder.textView.setTextColor(0xFF9E9E9E);
+                    } else {
+                        MainActivity.setTabs.add(string);
+                        holder.textView.setTextColor(0xFF000000);
+                    }
             }
         });
         return holder;
@@ -60,19 +51,18 @@ class SetTabAdapter extends MyBaseAdapter<String>{
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder0, int position) {
         SetTabViewHolder holder = (SetTabViewHolder) holder0;
-        String string = SetTabActivity.datas.get(position);
+        String string = SetTabActivity.datas.get(holder.getAdapterPosition());
         holder.textView.setText(string);
-//        if(!MainActivity.setTabs.contains(string)){
-//            holder.textView.setTextColor(0xFF9E9E9E);
-//        } else {
-//            holder.textView.setTextColor(0xFF000000);
-//        }
+        if(!MainActivity.setTabs.contains(string)){
+            holder.textView.setTextColor(0xFF9E9E9E);
+        } else {
+            holder.textView.setTextColor(0xFF000000);
+        }
     }
 
     @Override
     public int getItemCount() {
-//        return SetTabActivity.datas.size();
-        return 4;
+        return SetTabActivity.datas.size();
     }
 
 

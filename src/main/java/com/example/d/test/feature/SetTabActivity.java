@@ -16,11 +16,7 @@ public class SetTabActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_tab);
-//        datas.addAll(MainActivity.sshUrlMap.values());
-        datas.add("1");
-        datas.add("2");
-        datas.add("3");
-        datas.add("4");
+        datas.addAll(MainActivity.sshUrlMap.values());
         mRecyclerView = findViewById(R.id.set_tab_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         SetTabAdapter mAdapter = new SetTabAdapter(datas,SetTabActivity.this);
