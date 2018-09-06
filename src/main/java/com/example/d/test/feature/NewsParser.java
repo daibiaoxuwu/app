@@ -1,5 +1,7 @@
 package com.example.d.test.feature;
 
+import android.util.Log;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -100,6 +102,7 @@ public class NewsParser {
         }
     }
 
+//    private static final String TAG = "NewsParser";
     private void readDoc3(Document doc, String channel) {
         Elements elements = doc.select("item");
         for (int i = elements.size() - 1; i >= 0; i--) {
@@ -108,6 +111,7 @@ public class NewsParser {
             String title = element.getElementsByTag("title").text();
             if(arrayMap.containsKey(title)){
                 arrayMap.get(title).addChannel(channel);
+//                Log.d(TAG, "readDoc3: "+arrayMap.get(title));
             } else{
                 newsItem.setTitle(title);
                 newsItem.setLink(element.getElementsByTag("link").text());

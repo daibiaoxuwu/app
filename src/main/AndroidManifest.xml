@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.d.test.feature">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!--ShareSDK需要权限start-->
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <!-- 蓝牙分享所需的权限 -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <!--ShareSDK需要权限end-->
     <application
         android:allowBackup="true"
-        android:theme="@style/AppTheme"
-        >
-        <activity android:name=".MainActivity" android:label="News">
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:label="News">
             <intent-filter android:order="1">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -37,6 +52,7 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
+        <activity android:name=".LoginActivity"></activity>
     </application>
 
 </manifest>
