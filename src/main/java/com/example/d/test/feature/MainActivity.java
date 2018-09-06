@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private static String selectedChannel = "首页";
     private static final ArrayList<NewsItem> newsItemOfCategory = new ArrayList<>();
     public static FeedsAdapter feedsAdapter;
+    public static FloatingActionButton floatingActionButton;
 
     public static List<NewsItem> getNewsItemList() {
         return newsItemList;
@@ -155,11 +156,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
+        floatingActionButton = findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showShare();
+                Intent intent = new Intent(MainActivity.this, SetTabActivity.class);
+                startActivity(intent);
             }
         });
 
