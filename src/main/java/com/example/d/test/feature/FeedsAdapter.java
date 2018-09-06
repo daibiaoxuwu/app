@@ -1,59 +1,52 @@
-
 package com.example.d.test.feature;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by rishabh on 26-02-2016.
- */
-public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder> {
-    List<NewsItem> newsItems;
+class FeedsAdapter extends BaseAdapter<NewsItem> {
     Context context;
 
     public FeedsAdapter(List<NewsItem> newsItems,  Context context) {
-        this.newsItems = newsItems;
+        super(newsItems);
         this.context = context;
     }
 
-    private static final String TAG = "FeedsAdapter";
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+//        View view = LayoutInflater.from(parent.getContext())
+//                .inflate(R.layout.item_recycler, parent, false);
+//        return new ViewHolder(view);
+
         View view= LayoutInflater.from(context).inflate(R.layout.custum_row_news_item,parent,false);
         final MyViewHolder holder=new MyViewHolder(view);
         holder.newsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View clickView) {
-                    int position = holder.getAdapterPosition();
+                int position = holder.getAdapterPosition();
 //                    holder.Title.setTextColor(0x66CCFF);
-                    newsItems.get(position).setDescription("123");
-                    Intent intent = new Intent(context, NewsView.class);
-                    intent.putExtra("Title", newsItems.get(position).getTitle());
-                    context.startActivity(intent);
+                newsItems.get(position).setDescription("123");
+                Intent intent = new Intent(context, NewsView.class);
+                intent.putExtra("Title", newsItems.get(position).getTitle());
+                context.startActivity(intent);
             }
         });
         return holder;
-    }
 
+    }
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         YoYo.with(Techniques.FadeIn).playOn(holder.cardView);
@@ -68,26 +61,28 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
 
     }
 
-
-
+//    @Override
+//    public void onBindViewHolder(ViewHolder holder, int position) {
+//        holder.setData(newsItems.get(position));
+//    }
     @Override
-    public int getItemCount() {
-        return newsItems.size();
+    public boolean areItemsTheSame(NewsItem oldItem, NewsItem newItem) {
+        return oldItem.getTitle().equals(newItem.getTitle());
     }
+    @Override
+    public boolean areContentsTheSame(NewsItem oldItem, NewsItem newItem) {
+        return oldItem.getPics().equals(newItem.getPics());
+    }
+    //TODO:what's contents?
+//    class ViewHolder extends RecyclerView.ViewHolder {
+//        public ViewHolder(View itemView) {
+//            super(itemView);
+//        }
+//        public void setData(NewsItem newsItem) {
+//            TextView textView = (TextView) this.itemView.findViewById(R.id.text);
+//            textView.setText(newsItem.getTitle());
+//        }
+//    }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView Title,Description,Date;
-        ImageView Thumbnail;
-        CardView cardView;
-        View newsView;
-        public MyViewHolder(View itemView) {
-            super(itemView);
-            newsView = itemView;
-            Title= (TextView) itemView.findViewById(R.id.title_text);
-            Description= (TextView) itemView.findViewById(R.id.description_text);
-            Date= (TextView) itemView.findViewById(R.id.date_text);
-            Thumbnail= (ImageView) itemView.findViewById(R.id.thumb_img);
-            cardView= (CardView) itemView.findViewById(R.id.cardview);
-        }
-    }
+
 }
