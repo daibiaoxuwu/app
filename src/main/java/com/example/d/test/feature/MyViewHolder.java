@@ -11,6 +11,8 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
     ImageView Thumbnail;
     CardView cardView;
     View newsView;
+    boolean isRead = false;
+    boolean isLiked = false;
     public MyViewHolder(View itemView) {
         super(itemView);
         newsView = itemView;

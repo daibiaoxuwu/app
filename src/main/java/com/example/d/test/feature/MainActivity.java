@@ -32,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
     public static Map<String, String> sshUrlMap = new HashMap<>();
     public static LinkedList<NewsItem> arrayList = new LinkedList<>();
     public static Map<String, NewsItem> arrayMap = new HashMap<>();
-    public static Map<String, Boolean> isRead = new HashMap<>();
-    public static Map<String, Boolean> isSaved = new HashMap<>();
 
     //only for testing, not memory
     private static List<NewsItem> newsItemList=new ArrayList<>();
@@ -45,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private static String selectedChannel = "首页";
     private static final ArrayList<NewsItem> newsItemOfCategory = new ArrayList<>();
+    public static FeedsAdapter feedsAdapter;
 
     public static List<NewsItem> getNewsItemList() {
         return newsItemList;
@@ -168,24 +167,21 @@ public class MainActivity extends AppCompatActivity {
     private final static int MAX_NEWS_ITEM_SIZE = 25;
     public void changeTab(){
 //                Toast.makeText(MainActivity.this,selectedChannel,Toast.LENGTH_SHORT).show();
-        if(!selectedChannel.equals("首页")) {
             newsItemOfCategory.clear();
             for(NewsItem newsItem: getNewsItems()){
-                if(newsItem.getChannel().contains(selectedChannel)){
+                if(selectedChannel.equals("首页") || newsItem.getChannel().contains(selectedChannel)){
                     newsItemOfCategory.add(newsItem);
                     if(newsItemOfCategory.size()> MAX_NEWS_ITEM_SIZE) break;
                 }
             }
-            FeedsAdapter adapter = new FeedsAdapter(newsItemOfCategory, MainActivity.this);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-            mRecyclerView.addItemDecoration(new VerticalSpace(20));
-            mRecyclerView.setAdapter(adapter);
-        } else {
-            FeedsAdapter adapter = new FeedsAdapter(getNewsItems(), MainActivity.this);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-            mRecyclerView.addItemDecoration(new VerticalSpace(20));
-            mRecyclerView.setAdapter(adapter);
-        }
+            if(feedsAdapter == null) {
+                feedsAdapter = new FeedsAdapter(newsItemOfCategory, MainActivity.this);
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                mRecyclerView.addItemDecoration(new VerticalSpace(20));
+                mRecyclerView.setAdapter(feedsAdapter);
+            } else {
+                feedsAdapter.notifyDiff();
+            }
     }
 
     public static String getSelectedChannel() {

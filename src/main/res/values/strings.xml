@@ -2,7 +2,7 @@
     <string name="app_name">RssReader</string>
     <string name="action_settings">Settings</string>
 
-<string name="opening_wechat">正在打开微信，请稍后...</string>
-<string name="opening_qq">正在打开QQ，请稍后...</string>
-<string name="opening_blog">正在打开微博，请稍后...</string>
+    <string name="opening_wechat">正在打开微信，请稍后...</string>
+    <string name="opening_qq">正在打开QQ，请稍后...</string>
+    <string name="opening_blog">正在打开微博，请稍后...</string>
 </resources>

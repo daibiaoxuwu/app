@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ class FeedsAdapter extends BaseAdapter<NewsItem> {
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Log.d(TAG, "onCreateViewHolder: ");
+        
 //        View view = LayoutInflater.from(parent.getContext())
 //                .inflate(R.layout.item_recycler, parent, false);
 //        return new ViewHolder(view);
@@ -36,24 +39,39 @@ class FeedsAdapter extends BaseAdapter<NewsItem> {
         holder.newsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View clickView) {
+                Log.d(TAG, "onCreate_onClick: ");
                 int position = holder.getAdapterPosition();
 //                    holder.Title.setTextColor(0x66CCFF);
-                newsItems.get(position).setDescription("123");
+                holder.Title.setTextColor(0xFF000000);
+                holder.isRead = true;
+                NewsItem currentNewsItem = newsItems.get(position);
+                currentNewsItem.setRead();
+                MainActivity.feedsAdapter.notifyDiff();
                 Intent intent = new Intent(context, NewsView.class);
-                intent.putExtra("Title", newsItems.get(position).getTitle());
+                intent.putExtra("Title", currentNewsItem.getTitle());
                 context.startActivity(intent);
             }
         });
         return holder;
 
     }
+
+    private static final String TAG = "FeedsAdapter";
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        YoYo.with(Techniques.FadeIn).playOn(holder.cardView);
+//        YoYo.with(Techniques.FadeIn).playOn(holder.cardView);
+        Log.d(TAG, "onBindViewHolder: "+holder.Description.getText());
         NewsItem current=newsItems.get(position);
-        holder.Title.setText(current.getTitle());
         holder.Description.setText(current.getDescription());
         holder.Date.setText(current.getChannel() + " " + current.getPubdate());
+        holder.isRead=current.isRead();
+        holder.isLiked=current.isLiked();
+        if(holder.isRead){
+            holder.Title.setTextColor(0xFF000000);
+        } else {
+            holder.Title.setTextColor(0xFFFFFFFF);
+        }
+        holder.Title.setText(current.getTitle());
         if(current.getPics().size() > 0)
             Picasso.with(context).load(current.getPics().get(0)).into(holder.Thumbnail);
         else
@@ -67,7 +85,7 @@ class FeedsAdapter extends BaseAdapter<NewsItem> {
 //    }
     @Override
     public boolean areItemsTheSame(NewsItem oldItem, NewsItem newItem) {
-        return oldItem.getTitle().equals(newItem.getTitle());
+        return (oldItem.getTitle().equals(newItem.getTitle()) && oldItem.isLiked() == newItem.isLiked());
     }
     @Override
     public boolean areContentsTheSame(NewsItem oldItem, NewsItem newItem) {

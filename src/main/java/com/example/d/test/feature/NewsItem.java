@@ -12,6 +12,8 @@ public class NewsItem {
     private String category ;
     private String comments;
     private String description;
+    private boolean isRead = false;
+    private boolean isLiked = false;
     private ArrayList<String> pics = new ArrayList<>();
 
     public void setPics(String pic) {
@@ -28,6 +30,22 @@ public class NewsItem {
     }
 
     private     String channel;
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setRead() {
+        isRead = true;
+    }
+
+    public void setLiked() {
+        isLiked = true;
+    }
 
     @Override
     public String toString() {
@@ -76,8 +94,10 @@ public class NewsItem {
         this.channel = channel;
     }
     public void addChannel(String channel) {
-        this.channel += ";";
-        this.channel += channel;
+        if(!this.channel.contains(channel)) {
+            this.channel += ";";
+            this.channel += channel;
+        }
     }
 
     public String getTitle() {

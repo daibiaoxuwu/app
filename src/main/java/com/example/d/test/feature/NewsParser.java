@@ -124,8 +124,6 @@ public class NewsParser {
 
                 MainActivity.arrayList.addFirst(newsItem);
                 MainActivity.arrayMap.put(newsItem.getTitle(),newsItem);
-                MainActivity.isRead.put(newsItem.getTitle(), false);
-                MainActivity.isSaved.put(newsItem.getTitle(), false);
             }
         }
     }
