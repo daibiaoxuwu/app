@@ -74,6 +74,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.first_layout);
 
+        sshUrlMap.put("http://www.people.com.cn/rss/politics.xml", "国内新闻");
+        sshUrlMap.put("http://www.people.com.cn/rss/world.xml", "国际新闻");
+        sshUrlMap.put("http://www.people.com.cn/rss/finance.xml", "经济新闻");
+        sshUrlMap.put("http://www.people.com.cn/rss/sports.xml", "体育新闻");
+        sshUrlMap.put("http://www.people.com.cn/rss/haixia.xml", "台湾新闻");
+        sshUrlMap.put("http://www.people.com.cn/rss/edu.xml", "教育新闻");
+//        sshUrlMap.put("http://www.people.com.cn/rss/bbs.xml", "强国论坛");
+        sshUrlMap.put("http://www.people.com.cn/rss/game.xml", "游戏新闻");
+        sshUrlMap.put("http://www.people.com.cn/rss/opml.xml", "中文新闻");
 
         //toolbar
         Toolbar toolbar=findViewById(R.id.toolbar);
