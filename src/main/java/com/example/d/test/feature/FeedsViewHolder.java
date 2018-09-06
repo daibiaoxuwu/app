@@ -6,14 +6,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MyViewHolder extends RecyclerView.ViewHolder {
+public class FeedsViewHolder extends RecyclerView.ViewHolder {
     TextView Title,Description,Date;
     ImageView Thumbnail;
     CardView cardView;
     View newsView;
     boolean isRead = false;
     boolean isLiked = false;
-    public MyViewHolder(View itemView) {
+    public FeedsViewHolder(View itemView) {
         super(itemView);
         newsView = itemView;
         Title= (TextView) itemView.findViewById(R.id.title_text);

@@ -4,14 +4,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class SetTabActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
-    private final ArrayList<String> datas = new ArrayList<>();
+    private final LinkedList<String> datas = new LinkedList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,9 +19,9 @@ public class SetTabActivity extends AppCompatActivity {
         for(String string : MainActivity.sshUrlMap.values()){
             datas.add(string);
         }
-        mRecyclerView = findViewById(R.id.recycler_view);
+        mRecyclerView = findViewById(R.id.set_tab_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        MyAdapter mAdapter = new MyAdapter(datas);
+        SetTabAdapter mAdapter = new SetTabAdapter(datas);
         mRecyclerView.setAdapter(mAdapter);
     }
 }

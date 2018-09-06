@@ -2,22 +2,15 @@ package com.example.d.test.feature;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-class FeedsAdapter extends BaseAdapter<NewsItem> {
+class FeedsAdapter extends MyBaseAdapter<NewsItem> {
     Context context;
 
     public FeedsAdapter(List<NewsItem> newsItems,  Context context) {
@@ -27,19 +20,17 @@ class FeedsAdapter extends BaseAdapter<NewsItem> {
 
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.d(TAG, "onCreateViewHolder: ");
-        
+    public FeedsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
 //        View view = LayoutInflater.from(parent.getContext())
 //                .inflate(R.layout.item_recycler, parent, false);
 //        return new ViewHolder(view);
 
         View view= LayoutInflater.from(context).inflate(R.layout.custum_row_news_item,parent,false);
-        final MyViewHolder holder=new MyViewHolder(view);
+        final FeedsViewHolder holder=new FeedsViewHolder(view);
         holder.newsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View clickView) {
-                Log.d(TAG, "onCreate_onClick: ");
                 int position = holder.getAdapterPosition();
 //                    holder.Title.setTextColor(0x66CCFF);
                 holder.Title.setTextColor(0xFF000000);
@@ -58,9 +49,8 @@ class FeedsAdapter extends BaseAdapter<NewsItem> {
 
     private static final String TAG = "FeedsAdapter";
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(FeedsViewHolder holder, int position) {
 //        YoYo.with(Techniques.FadeIn).playOn(holder.cardView);
-        Log.d(TAG, "onBindViewHolder: "+holder.Description.getText());
         NewsItem current=newsItems.get(position);
         holder.Description.setText(current.getDescription());
         holder.Date.setText(current.getChannel() + " " + current.getPubdate());

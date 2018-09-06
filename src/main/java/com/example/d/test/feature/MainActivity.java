@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     public static LinkedList<NewsItem> getNewsItems() {
         return newsItems;
     }
+    public static final ArrayList<String> setTabs = new ArrayList<>();
 
 
     @Override
@@ -88,6 +89,11 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar=findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        setTabs.add("首页");
+        setTabs.add("国内新闻");
+        setTabs.add("国际新闻");
+        setTabs.add("经济新闻");
+        setTabs.add("体育新闻");
 
         mRecyclerView=findViewById(R.id.recycler_view);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);

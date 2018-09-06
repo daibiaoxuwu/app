@@ -6,10 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseAdapter<T> extends RecyclerView.Adapter<MyViewHolder>{
+public abstract class MyBaseAdapter<T> extends RecyclerView.Adapter<FeedsViewHolder>{
     protected final List<T> temp; // 用于保存修改之前的数据源的副本
     protected final List<T> newsItems; // 数据源
-    public BaseAdapter(List<T> newsItems) {
+    public MyBaseAdapter(List<T> newsItems) {
         this.newsItems = newsItems;
         temp = new ArrayList<>(newsItems);
     }
@@ -32,12 +32,12 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<MyViewHolder>{
             // 判断是否是同一个 item
             @Override
             public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                return BaseAdapter.this.areItemsTheSame(temp.get(oldItemPosition), newsItems.get(newItemPosition));
+                return MyBaseAdapter.this.areItemsTheSame(temp.get(oldItemPosition), newsItems.get(newItemPosition));
             }
             // 如果是同一个 item 判断内容是否相同
             @Override
             public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-                return BaseAdapter.this.areContentsTheSame(temp.get(oldItemPosition), newsItems.get(newItemPosition));
+                return MyBaseAdapter.this.areContentsTheSame(temp.get(oldItemPosition), newsItems.get(newItemPosition));
             }
         });
         diffResult.dispatchUpdatesTo(this);
