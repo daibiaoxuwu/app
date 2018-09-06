@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private static List<NewsItem> cachedNewsItemList=new ArrayList<>();
     static LinkedList<NewsItem> newsItems;
     private ReadRss readRss;
-    private TabLayout tabLayout;
+    public static TabLayout tabLayout;
     private static String selectedChannel = "首页";
     private static final ArrayList<NewsItem> newsItemOfCategory = new ArrayList<>();
     public static FeedsAdapter feedsAdapter;
@@ -98,6 +98,10 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView=findViewById(R.id.recycler_view);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
+        feedsAdapter = new FeedsAdapter(newsItemOfCategory, MainActivity.this);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        mRecyclerView.addItemDecoration(new VerticalSpace(20));
+        mRecyclerView.setAdapter(feedsAdapter);
         readRss = new ReadRss(this, mRecyclerView);
         readRss.execute();
 //        myDatabaseHelper=new MyDatabaseHelper(this,"BookStore.db",null,1);
@@ -133,10 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         tabLayout = (TabLayout) findViewById(R.id.simpleTabLayout);
-        TabLayout.Tab firstTab = tabLayout.newTab();
-        firstTab.setText("首页");
-        tabLayout.addTab(firstTab);
-        for (String string : sshUrlMap.values()) {
+        for (String string : setTabs) {
             TabLayout.Tab tempTab = tabLayout.newTab();
             tempTab.setText(string);
             tabLayout.addTab(tempTab);
@@ -173,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private final static int MAX_NEWS_ITEM_SIZE = 25;
-    public void changeTab(){
+    public  static void changeTab(){
 //                Toast.makeText(MainActivity.this,selectedChannel,Toast.LENGTH_SHORT).show();
             newsItemOfCategory.clear();
             for(NewsItem newsItem: getNewsItems()){
@@ -182,14 +183,7 @@ public class MainActivity extends AppCompatActivity {
                     if(newsItemOfCategory.size()> MAX_NEWS_ITEM_SIZE) break;
                 }
             }
-            if(feedsAdapter == null) {
-                feedsAdapter = new FeedsAdapter(newsItemOfCategory, MainActivity.this);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-                mRecyclerView.addItemDecoration(new VerticalSpace(20));
-                mRecyclerView.setAdapter(feedsAdapter);
-            } else {
-                feedsAdapter.notifyDiff();
-            }
+            feedsAdapter.notifyDiff();
     }
 
     public static String getSelectedChannel() {

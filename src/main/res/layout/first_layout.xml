@@ -34,6 +34,9 @@
             app:tabSelectedTextColor="#f00"
             app:tabTextColor="#000"
             app:layout_scrollFlags="scroll"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
+            app:tabMaxWidth="0dp"
             />
         </android.support.design.widget.AppBarLayout>
 
