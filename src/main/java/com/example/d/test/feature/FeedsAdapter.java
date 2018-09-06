@@ -3,6 +3,8 @@ package com.example.d.test.feature;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -42,11 +44,12 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
             @Override
             public void onClick(View clickView) {
                     int position = holder.getAdapterPosition();
+//                    holder.Title.setTextColor(0x66CCFF);
+                    newsItems.get(position).setDescription("123");
                     Intent intent = new Intent(context, NewsView.class);
-                    intent.putExtra("Url", newsItems.get(position).getLink());
+                    intent.putExtra("Title", newsItems.get(position).getTitle());
                     context.startActivity(intent);
             }
-
         });
         return holder;
     }

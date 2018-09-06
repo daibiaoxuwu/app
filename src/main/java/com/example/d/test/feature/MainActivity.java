@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -13,15 +12,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import cn.sharesdk.onekeyshare.OnekeyShare;
 
@@ -29,12 +29,18 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     private static final String[] data={"a","b","c","d","e","f","g"};
+    public static Map<String, String> sshUrlMap = new HashMap<>();
+    public static LinkedList<NewsItem> arrayList = new LinkedList<>();
+    public static Map<String, NewsItem> arrayMap = new HashMap<>();
+    public static Map<String, Boolean> isRead = new HashMap<>();
+    public static Map<String, Boolean> isSaved = new HashMap<>();
 
     //only for testing, not memory
     private static List<NewsItem> newsItemList=new ArrayList<>();
 
     //this is in memory
     private static List<NewsItem> cachedNewsItemList=new ArrayList<>();
+    static LinkedList<NewsItem> newsItems;
     private ReadRss readRss;
     private TabLayout tabLayout;
     private static String selectedChannel = "首页";
@@ -57,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
     private static int newsPointer=5;
 
     private static final int listSize=20;
+
+    public static LinkedList<NewsItem> getNewsItems() {
+        return newsItems;
+    }
 
 
     @Override
@@ -111,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         TabLayout.Tab firstTab = tabLayout.newTab();
         firstTab.setText("首页");
         tabLayout.addTab(firstTab);
-        for (String string : NewsParser.sshUrlMap.values()) {
+        for (String string : sshUrlMap.values()) {
             TabLayout.Tab tempTab = tabLayout.newTab();
             tempTab.setText(string);
             tabLayout.addTab(tempTab);
@@ -151,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
 //                Toast.makeText(MainActivity.this,selectedChannel,Toast.LENGTH_SHORT).show();
         if(!selectedChannel.equals("首页")) {
             newsItemOfCategory.clear();
-            for(NewsItem newsItem:ReadRss.getNewsItems()){
+            for(NewsItem newsItem: getNewsItems()){
                 if(newsItem.getChannel().contains(selectedChannel)){
                     newsItemOfCategory.add(newsItem);
                     if(newsItemOfCategory.size()> MAX_NEWS_ITEM_SIZE) break;
@@ -162,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
             mRecyclerView.addItemDecoration(new VerticalSpace(20));
             mRecyclerView.setAdapter(adapter);
         } else {
-            FeedsAdapter adapter = new FeedsAdapter(ReadRss.getNewsItems(), MainActivity.this);
+            FeedsAdapter adapter = new FeedsAdapter(getNewsItems(), MainActivity.this);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
             mRecyclerView.addItemDecoration(new VerticalSpace(20));
             mRecyclerView.setAdapter(adapter);

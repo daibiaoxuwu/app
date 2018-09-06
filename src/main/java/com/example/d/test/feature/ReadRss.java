@@ -1,32 +1,11 @@
 package com.example.d.test.feature;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.widget.Toast;
 
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import java.util.LinkedList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by rishabh on 31-01-2016.
@@ -34,7 +13,6 @@ import java.util.regex.Pattern;
 public class ReadRss extends AsyncTask<Void, Void, Void> {
     MainActivity context;
     private ProgressDialog progressDialog;
-    private static LinkedList<NewsItem> newsItems;
     RecyclerView recyclerView;
     URL url;
     private NewsParser newsParser;
@@ -47,10 +25,6 @@ public class ReadRss extends AsyncTask<Void, Void, Void> {
         this.newsParser = new NewsParser();
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Loading...");
-    }
-
-    public static LinkedList<NewsItem> getNewsItems() {
-        return newsItems;
     }
 
     //before fetching of rss statrs show progress to user
@@ -88,7 +62,7 @@ public class ReadRss extends AsyncTask<Void, Void, Void> {
 
     public void ProcessXml() {
         try {
-            newsItems = newsParser.parse();
+            MainActivity.newsItems = newsParser.parse();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);

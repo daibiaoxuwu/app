@@ -1,17 +1,12 @@
 package com.example.d.test.feature;
 
-import android.util.Log;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 
 
 import org.jsoup.nodes.Element;
@@ -23,11 +18,7 @@ import java.net.URL;
 public class NewsParser {
     private Connection c;
     private Statement stmt;
-    public static Map<String, String> sshUrlMap = new HashMap<>();
-    private LinkedList<NewsItem> arrayList = new LinkedList<>();
-    private Map<String, NewsItem> arrayMap = new HashMap<>();
-    public static Map<String, Boolean> isRead = new HashMap<>();
-    public static Map<String, Boolean> isSaved = new HashMap<>();
+
     private void work(String url, String channel) {
         System.out.println("URL:"+url + " CHANNEL:"+channel + " ");
         try {
@@ -41,25 +32,17 @@ public class NewsParser {
     }
 
     NewsParser() {
-        sshUrlMap.put("http://www.people.com.cn/rss/politics.xml", "国内新闻");
-        sshUrlMap.put("http://www.people.com.cn/rss/world.xml", "国际新闻");
-        sshUrlMap.put("http://www.people.com.cn/rss/finance.xml", "经济新闻");
-        sshUrlMap.put("http://www.people.com.cn/rss/sports.xml", "体育新闻");
-        sshUrlMap.put("http://www.people.com.cn/rss/haixia.xml", "台湾新闻");
-        sshUrlMap.put("http://www.people.com.cn/rss/edu.xml", "教育新闻");
-//        sshUrlMap.put("http://www.people.com.cn/rss/bbs.xml", "强国论坛");
-        sshUrlMap.put("http://www.people.com.cn/rss/game.xml", "游戏新闻");
-        sshUrlMap.put("http://www.people.com.cn/rss/opml.xml", "中文新闻");
+
         c = null;
         stmt = null;
     }
     public LinkedList<NewsItem> parse(){
         try {
 //            while(true) {
-            arrayList = new LinkedList<>();
-            arrayMap = new HashMap<>();
-            for (String string : sshUrlMap.keySet()) {
-                work(string, sshUrlMap.get(string));
+//            arrayList = new LinkedList<>();
+//            arrayMap = new HashMap<>();
+            for (String string : MainActivity.sshUrlMap.keySet()) {
+                work(string, MainActivity.sshUrlMap.get(string));
             }
                 /*
                 Class.forName("org.sqlite.JDBC");
@@ -94,11 +77,11 @@ public class NewsParser {
                 Thread.sleep(1000 * 60 * 60);
                 */
 //            }
-            return arrayList;
+            return MainActivity.arrayList;
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
-            return arrayList;
+            return MainActivity.arrayList;
         }
     }
 
@@ -109,8 +92,8 @@ public class NewsParser {
             Element element = elements.get(i);
             NewsItem newsItem = new NewsItem();
             String title = element.getElementsByTag("title").text();
-            if(arrayMap.containsKey(title)){
-                arrayMap.get(title).addChannel(channel);
+            if(MainActivity.arrayMap.containsKey(title)){
+                MainActivity.arrayMap.get(title).addChannel(channel);
 //                Log.d(TAG, "readDoc3: "+arrayMap.get(title));
             } else{
                 newsItem.setTitle(title);
@@ -139,10 +122,10 @@ public class NewsParser {
                     newsItem.setPics(src);
                 }
 
-                arrayList.addFirst(newsItem);
-                arrayMap.put(newsItem.getTitle(),newsItem);
-                isRead.put(newsItem.getTitle(), false);
-                isSaved.put(newsItem.getTitle(), false);
+                MainActivity.arrayList.addFirst(newsItem);
+                MainActivity.arrayMap.put(newsItem.getTitle(),newsItem);
+                MainActivity.isRead.put(newsItem.getTitle(), false);
+                MainActivity.isSaved.put(newsItem.getTitle(), false);
             }
         }
     }
