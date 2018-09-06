@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:id="@+id/cardview"
+    android:id="@+id/cardview2"
     app:cardElevation="2dp"
     app:cardCornerRadius="2dp" >
 
@@ -20,12 +20,13 @@
             android:id="@+id/set_tab_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/thumb_img"
             android:layout_centerHorizontal="true"
             android:padding="8dp"
             android:gravity="center"
             android:lines="1"
-            android:textAppearance="?android:attr/textAppearanceLargeInverse" />
+            android:textAppearance="?android:attr/textAppearanceLargeInverse"
+            android:textColor="@android:color/black"
+            />
 
 
     </RelativeLayout>

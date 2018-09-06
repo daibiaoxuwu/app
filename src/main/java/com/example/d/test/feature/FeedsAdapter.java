@@ -2,6 +2,8 @@ package com.example.d.test.feature;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +29,9 @@ class FeedsAdapter extends MyBaseAdapter<NewsItem> {
 //        return new ViewHolder(view);
 
         View view= LayoutInflater.from(context).inflate(R.layout.custum_row_news_item,parent,false);
+        Log.d(TAG, "onCreateViewHolder: "+view);
         final FeedsViewHolder holder=new FeedsViewHolder(view);
+        Log.d(TAG, "onCreateViewHolder: "+holder);
         holder.newsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View clickView) {
@@ -49,8 +53,9 @@ class FeedsAdapter extends MyBaseAdapter<NewsItem> {
 
     private static final String TAG = "FeedsAdapter";
     @Override
-    public void onBindViewHolder(FeedsViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder0, int position) {
 //        YoYo.with(Techniques.FadeIn).playOn(holder.cardView);
+        FeedsViewHolder holder=(FeedsViewHolder)holder0;
         NewsItem current=newsItems.get(position);
         holder.Description.setText(current.getDescription());
         holder.Date.setText(current.getChannel() + " " + current.getPubdate());

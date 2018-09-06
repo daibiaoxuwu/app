@@ -10,18 +10,20 @@ import java.util.LinkedList;
 public class SetTabActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
-    private final LinkedList<String> datas = new LinkedList<>();
+    public static final LinkedList<String> datas = new LinkedList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_tab);
-        for(String string : MainActivity.sshUrlMap.values()){
-            datas.add(string);
-        }
+//        datas.addAll(MainActivity.sshUrlMap.values());
+        datas.add("1");
+        datas.add("2");
+        datas.add("3");
+        datas.add("4");
         mRecyclerView = findViewById(R.id.set_tab_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        SetTabAdapter mAdapter = new SetTabAdapter(datas);
+        SetTabAdapter mAdapter = new SetTabAdapter(datas,SetTabActivity.this);
         mRecyclerView.setAdapter(mAdapter);
     }
 }

@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class MyBaseAdapter<T> extends RecyclerView.Adapter<FeedsViewHolder>{
+public abstract class MyBaseAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     protected final List<T> temp; // 用于保存修改之前的数据源的副本
     protected final List<T> newsItems; // 数据源
     public MyBaseAdapter(List<T> newsItems) {
